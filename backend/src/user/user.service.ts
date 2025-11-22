@@ -7,7 +7,6 @@ import {
 } from "@nestjs/common";
 import { UserRepository } from "./user.repository";
 import { CreateUserDTO } from "./dtos/create-user.dto";
-import { UserRole } from "./enums/user-role.enum";
 
 import * as bcrypt from "bcrypt";
 
