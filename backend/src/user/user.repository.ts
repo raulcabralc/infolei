@@ -9,14 +9,14 @@ export class UserRepository {
   constructor(@InjectModel("User") private readonly userModel: Model<User>) {}
 
   async create(user: CreateUserDTO): Promise<User> {
-    return this.userModel.create(user);
+    return (await this.userModel.create(user)).populate("interestTags", "name");
   }
 
   async delete(userId: string): Promise<User | null> {
-    return this.userModel.findByIdAndDelete(userId);
+    return await this.userModel.findByIdAndDelete(userId);
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email });
+    return await this.userModel.findOne({ email });
   }
 }

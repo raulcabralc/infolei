@@ -15,6 +15,7 @@ export class CreateUserDTO {
   @IsString()
   bio?: string;
 
+  @IsOptional()
   @IsArray()
-  interestTags: string[];
+  interestTags?: string[];
 }

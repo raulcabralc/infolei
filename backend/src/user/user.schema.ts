@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 @Schema({ timestamps: true })
 export class User extends Document {
@@ -16,8 +16,8 @@ export class User extends Document {
   bio?: string;
 
   // CATEGORIAS QUE A IA VAI ADICIONAR BASEADO NO TEXTO ENVIADO DA BIO
-  @Prop({ type: [String], default: [] })
-  interestTags: string[];
+  @Prop({ type: [Types.ObjectId], ref: "Category", default: [] })
+  interestTags: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
