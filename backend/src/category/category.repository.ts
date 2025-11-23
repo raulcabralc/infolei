@@ -19,6 +19,10 @@ export class CategoryRepository {
     return await this.categoryModel.find();
   }
 
+  async findOneByName(name: string) {
+    return await this.categoryModel.findOne({ name });
+  }
+
   async update(
     id: string,
     category: UpdateCategoryDTO,

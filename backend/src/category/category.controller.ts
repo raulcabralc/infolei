@@ -39,4 +39,11 @@ export class CategoryController {
   async delete(@Param("id") id: string): Promise<Category | null> {
     return await this.categoryService.delete(id);
   }
+
+  // SEED
+
+  @Post("/seed")
+  async seed() {
+    return await this.categoryService.seed();
+  }
 }
