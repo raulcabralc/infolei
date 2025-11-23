@@ -11,6 +11,8 @@ import { CreateUserDTO } from "./dtos/create-user.dto";
 import * as bcrypt from "bcrypt";
 import { AiService } from "src/ai/ai.service";
 import { CategoryService } from "src/category/category.service";
+import { Types } from "mongoose";
+import { User } from "./user.schema";
 
 @Injectable()
 export class UserService {
@@ -19,6 +21,16 @@ export class UserService {
     private readonly aiService: AiService,
     private readonly categoryService: CategoryService,
   ) {}
+
+  async findOne(userId: string): Promise<User | NotFoundException> {
+    const user = await this.userRepository.findOne(userId);
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    return user;
+  }
 
   async create(
     userDTO: CreateUserDTO,
@@ -68,6 +80,34 @@ export class UserService {
       console.log(error);
       throw new ServiceUnavailableException("An unknown error has occured.");
     }
+  }
+
+  async updateInterestTags(userId: string, interestTags: Types.ObjectId[]) {
+    if (!interestTags || interestTags.length === 0) {
+      throw new BadRequestException("Interest tags must be provided");
+    }
+
+    const user = await this.userRepository.findOne(userId);
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    const categories = await this.categoryService.index();
+
+    for (const tag of interestTags) {
+      if (!Types.ObjectId.isValid(tag)) {
+        throw new BadRequestException("Invalid interest tag format");
+      }
+    }
+
+    for (const tag of interestTags) {
+      if (!categories.some((category) => category._id.equals(tag))) {
+        throw new BadRequestException("Invalid interest tag");
+      }
+    }
+
+    return await this.userRepository.updateInterestTags(userId, interestTags);
   }
 
   async delete(userId: string): Promise<CreateUserDTO | NotFoundException> {
