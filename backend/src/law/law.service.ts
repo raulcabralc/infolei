@@ -40,6 +40,10 @@ export class LawService {
     return this.lawRepository.index(filters, skip, limit, page);
   }
 
+  async findById(id: string) {
+    return this.lawRepository.findOneById(id);
+  }
+
   async syncFromCamara() {
     const url =
       "https://dadosabertos.camara.leg.br/api/v2/proposicoes?codSituacao=1140&ordem=DESC&ordenarPor=id";

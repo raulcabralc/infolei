@@ -35,6 +35,10 @@ export class LawRepository {
     };
   }
 
+  async findOneById(id: string) {
+    return await this.lawModel.findById(id).populate("category");
+  }
+
   async findOneByOfficialTitle(value: string) {
     return await this.lawModel.findOne({ officialTitle: value });
   }

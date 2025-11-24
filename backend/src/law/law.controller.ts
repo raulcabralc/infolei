@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Query,
   ValidationPipe,
@@ -18,6 +19,16 @@ export class LawController {
     @Query(new ValidationPipe({ transform: true })) queryDTO: LawsIndexDTO,
   ) {
     return this.lawService.index(queryDTO);
+  }
+
+  @Get("/:id")
+  async findById(@Param("id") id: string) {
+    return this.lawService.findById(id);
+  }
+
+  @Post("/sync-batch")
+  async syncBatch(@Query("limit") limit: number) {
+    return this.lawService.syncBatch(limit);
   }
 
   @Post("/sync")
